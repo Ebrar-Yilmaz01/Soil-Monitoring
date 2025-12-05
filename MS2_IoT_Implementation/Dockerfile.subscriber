@@ -1,0 +1,12 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# MQTT Library installieren
+RUN pip install --no-cache-dir paho-mqtt
+
+# Python Script kopieren
+COPY subscriber.py .
+
+# Container läuft Subscriber endlos
+CMD ["python", "subscriber.py"]
