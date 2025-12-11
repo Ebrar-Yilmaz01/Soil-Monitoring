@@ -4,7 +4,7 @@ import time
 import random
 import paho.mqtt.client as mqtt
 
-CSV_PATH = "../Crop_recommendation.csv"
+CSV_PATH = "/Crop_recommendation.csv"
 SEND_INTERVAL = 30
 
 BROKER = "broker.hivemq.com"
@@ -50,7 +50,7 @@ def apply_noise(row):
     }
 
 def main():
-    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+    client = mqtt.Client()
     client.connect(BROKER, PORT, 60)
     client.loop_start()
     rows = load_dataset()
