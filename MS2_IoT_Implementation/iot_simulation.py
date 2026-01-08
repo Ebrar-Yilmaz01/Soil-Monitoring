@@ -4,8 +4,8 @@ import time
 import random
 import paho.mqtt.client as mqtt
 
-CSV_PATH = "/Crop_recommendation.csv"
-SEND_INTERVAL = 30
+CSV_PATH = "Crop_recommendation.csv"
+SEND_INTERVAL = 5
 
 BROKER = "broker.hivemq.com"
 PORT = 1883
