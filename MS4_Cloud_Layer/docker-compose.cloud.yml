@@ -1,0 +1,13 @@
+services:
+  cloud-a:
+    build:
+      context: ./cloud_node_a
+      dockerfile: Dockerfile
+    container_name: soil-cloud-a
+    environment:
+      - LOG_LEVEL=DEBUG
+      - MQTT_BROKER=broker.hivemq.com
+      - AKKA_ENDPOINT=http://cloud-b:8080/alert
+    ports:
+      - "8081:8080"
+    restart: unless-stopped

@@ -2,14 +2,16 @@ import csv
 import json
 import time
 import random
+import os
 import paho.mqtt.client as mqtt
 
-CSV_PATH = "Crop_recommendation.csv"
-SEND_INTERVAL = 5
 
-BROKER = "broker.hivemq.com"
-PORT = 1883
-TOPIC = "farm/data"
+CSV_PATH = os.getenv('CSV_PATH', '/app/Crop_recommendation.csv')
+SEND_INTERVAL = int(os.getenv('SEND_INTERVAL', 5))
+BROKER = os.getenv('BROKER', "broker.hivemq.com")
+PORT = int(os.getenv('PORT', 1883))
+TOPIC = os.getenv('TOPIC', "farm/data")
+
 
 DEVICES = [
     "device_germany",
@@ -19,13 +21,17 @@ DEVICES = [
     "device_brazil"
 ]
 
+
 NUM_DEVICES = len(DEVICES)
+
 
 def add_noise(value, std):
     return value + random.gauss(0, std)
 
+
 def clamp(value, mn, mx):
     return max(mn, min(mx, value))
+
 
 def load_dataset():
     rows = []
@@ -38,6 +44,7 @@ def load_dataset():
             rows.append(row)
     return rows
 
+
 def apply_noise(row):
     return {
         "N": clamp(add_noise(row["N"], 5), 0, 200),
@@ -49,6 +56,7 @@ def apply_noise(row):
         "rainfall": clamp(add_noise(row["rainfall"], 10), 0, 500)
     }
 
+
 def main():
     client = mqtt.Client()
     client.connect(BROKER, PORT, 60)
@@ -59,6 +67,8 @@ def main():
 
     print(f"[INFO] Loaded {total_rows} rows from CSV.")
     print(f"[INFO] Connected to MQTT broker: {BROKER}")
+    print(f"[INFO] Publishing to topic: {TOPIC}")
+    print(f"[INFO] Send interval: {SEND_INTERVAL}s\n")
 
     while True:
         device_id = DEVICES[index % NUM_DEVICES]
@@ -66,17 +76,20 @@ def main():
         noisy = apply_noise(row)
         payload = {
             "device_id": device_id,
+            "timestamp": time.time(),
             **noisy
         }
         msg = json.dumps(payload)
 
-        print("\n==============================")
+        print("==============================")
         print(f"[MQTT] Publishing {device_id}")
         print(msg)
+        print("==============================\n")
 
         client.publish(TOPIC, msg)
         index += 1
         time.sleep(SEND_INTERVAL)
+
 
 if __name__ == "__main__":
     main()
