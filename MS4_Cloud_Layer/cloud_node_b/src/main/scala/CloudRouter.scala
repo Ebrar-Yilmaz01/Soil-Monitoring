@@ -3,7 +3,7 @@ import actors.RegionActor
 import play.api.libs.json._
 
 object CloudRouter {
-  val API_URL = "https://jw2b1cndwl.execute-api.us-east-1.amazonaws.com"
+  val API_URL = "arn:aws:apigateway:us-east-1::/apis/q5vwnpiabc/routes/1fn3ub8"
 
   def forwardToAWS(region: String, update: RegionActor.DeviceUpdate): Unit = {
 
