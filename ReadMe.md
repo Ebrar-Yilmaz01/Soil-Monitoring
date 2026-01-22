@@ -19,7 +19,7 @@ After starting and logging into AWS these are the steps to setup the services fo
 3.1 Create bucket
 3.2 General purpose | Bucket name: crop-surveillance-logs-balazs (or anything but it has to be the same as in the lambda code {Original idea was to have stored different log for each teammember but then decided that it's unnecessary, and was just too lazy to change the name at that point}) Leave everything else as it is and create bucket
 
-4.Search DynamoDB
+4. Search DynamoDB
 4.1 Create table
 4.2 Name: CropEvent | Partition Key: event_id
 4.3 leave everything else as default
